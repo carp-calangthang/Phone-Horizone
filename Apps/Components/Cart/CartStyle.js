@@ -60,8 +60,9 @@ export const cartStylesheet = StyleSheet.create({
         marginBottom: 20,
     },
 
-    checkbox: {
-        
+    delete: {
+        justifyContent: "center",
+        alignItems: "center",
     },
 
     product_items: {
@@ -143,7 +144,7 @@ export const cartStylesheet = StyleSheet.create({
     },
 
     total_text: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: "bold",
         marginLeft: 20,
     },
@@ -151,27 +152,12 @@ export const cartStylesheet = StyleSheet.create({
     checkout_button: {
         backgroundColor: "#F35C56",
         borderRadius: 10,
-        width: 150,
+        width: 100,
         height: 50,
         position: "absolute",
         right: 0,
-    },
-
-    in_button: {
-        flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-    },
-
-    checkout_button_text: {
-        fontSize: 18,
-        fontWeight: "bold",
-        color: "white",
-        lineHeight: 50,
-    },
-
-    checkout_icon: {
-        marginLeft: 10,
     },
 
 });

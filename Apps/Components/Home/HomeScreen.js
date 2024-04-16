@@ -15,6 +15,16 @@ function HomeScreen() {
 
     const navigation = useNavigation();
 
+    const [reload, setReload] = useState(false);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setReload(prev => !prev);
+        });
+    
+        return unsubscribe;
+    }, [navigation]);
+
     const [products, setProducts] = useState([]);
 
     useEffect(() => {

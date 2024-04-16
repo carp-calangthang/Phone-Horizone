@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import { Alert, SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { DetailStyleSheet as styles } from "./DetailStyle";
@@ -25,6 +26,28 @@ function Detail() {
             });
     }, [productId]);
 
+    const AddCart = async (productid) => {
+        try{
+            console.log(productid);
+            const token = await AsyncStorage.getItem('accessToken');
+            const response = await Axios.post('/cart/add', {
+                productid,
+                quantity: 1
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log(response.data.message);
+            if (response.data.ping === '1') {
+                console.log("Product added to cart successfully.");
+                Alert.alert('Thêm vào giỏ hàng thành công', 'Sản phẩm đã được thêm vào giỏ hàng của bạn.');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
 
@@ -46,7 +69,7 @@ function Detail() {
                     </TouchableOpacity>         
                 </View>
                 <TouchableOpacity
-                    onPress={console.log("Cart")}
+                    onPress={() => navigation.navigate("Cart")} // Chuyển đến màn hình giỏ hàng
                 >
                     <Image 
                         style={styles.image} 
@@ -113,7 +136,7 @@ function Detail() {
 
                 </View>
 
-                <TouchableOpacity style={styles.buy_button}>
+                <TouchableOpacity onPress={() => {AddCart(detail.id)}} style={styles.buy_button}>
                     <View style={styles.buy_button_items}>
                         <AntDesign name="shoppingcart" size={24} color="#fff" />
                         <Text style={styles.buy_button_text}>Mua ngay</Text>

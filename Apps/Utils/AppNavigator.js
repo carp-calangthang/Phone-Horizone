@@ -7,6 +7,7 @@ import HomeScreen from '../Components/Home/HomeScreen';
 import CartScreen from '../Components/Cart/CartScreen';
 import Detail from '../Components/Products/Detail';
 
+import LoginScreen from '../Components/Users/Login/LoginScreen';
 import AddScreen from '../Components/Manager/add/AddScreen';
 
 const Stack = createStackNavigator();
@@ -15,6 +16,11 @@ export const AppNavigator = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator>
+                <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{ headerShown: false }}
+                />
                 <Stack.Screen
                 name="Home"
                 component={HomeScreen}
