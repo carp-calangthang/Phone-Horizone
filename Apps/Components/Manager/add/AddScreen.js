@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert } from "react-native";
@@ -6,6 +6,7 @@ import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Image, ScrollVie
 import { Ionicons, Entypo } from '@expo/vector-icons';
 
 import { ProductUploadStyle as styles } from "./AddStyle";
+import Axios from "../../../Api/Axios";
 
 export default function ProductUpload() {
 
@@ -13,8 +14,34 @@ export default function ProductUpload() {
 
     const [images, setImages] = useState([]);
 
-    const [colorImage, setColorImage] = useState([]);
-    const [colorText, setColorText] = useState([]);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [price, setPrice] = useState('');
+
+    const Upload = async () => {
+        Axios.post('/product/upload', {
+            name: name,
+            image: images,
+            price: price,
+            description: description
+        })
+        .then((response) => {
+            console.log(response.data);
+            Alert.alert('Tải lên thành công', 'Sản phẩm đã được tải lên thành công!');
+            navigation.navigate('Home');
+        })
+        .catch((error) => {
+            console.log(error);
+            Alert.alert('Lỗi khi tải lên', 'Đã xảy ra lỗi khi tải lên sản phẩm. Vui lòng thử lại sau.');
+        }); 
+    };
+
+    // const showLog = () => {
+    //     console.log('Name:', name);
+    //     console.log('Description:', description);
+    //     console.log('Price:', price);
+    //     console.log('Images:', images);
+    // };
 
     const chooseImageFromDevice = async () => {
 
@@ -25,8 +52,7 @@ export default function ProductUpload() {
 
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
+            allowsEditing: false,
             quality: 1,
             multiple: true,
         });       
@@ -40,8 +66,6 @@ export default function ProductUpload() {
     const removeImage = (indexToRemove) => {
         setImages(prevImages => prevImages.filter((_, index) => index !== indexToRemove));
     };
-
-    
 
     return (
         <SafeAreaView style={styles.container}>
@@ -92,21 +116,23 @@ export default function ProductUpload() {
                         style={styles.input}
                         placeholder="Tên sản phẩm"
                         placeholderTextColor="#ffffff"
+                        value={name}
+                        onChangeText={(text) => setName(text)}
                     />
 
-                    <Text style={styles.product_title}>Màu sắc</Text>
+                    {/* <Text style={styles.product_title}>Màu sắc</Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Màu sắc"
                         placeholderTextColor="#ffffff"
-                    />
+                    /> */}
 
-                    <Text style={styles.product_title}>Dung lượng</Text>
+                    {/* <Text style={styles.product_title}>Dung lượng</Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Dung Lượng"
                         placeholderTextColor="#ffffff"
-                    />
+                    /> */}
 
                     <Text style={styles.product_title}>Thông tin sản phẩm</Text>
                     <TextInput
@@ -115,6 +141,8 @@ export default function ProductUpload() {
                         placeholder="Thông tin sản phẩm"
                         textAlignVertical="top"
                         placeholderTextColor="#ffffff"
+                        value={description}
+                        onChangeText={(text) => setDescription(text)}
                     />
 
                     <Text style={styles.product_title}>Giá của sản phẩm</Text>
@@ -122,8 +150,10 @@ export default function ProductUpload() {
                         style={styles.input}
                         placeholder="Giá của sản phẩm"
                         placeholderTextColor="#ffffff"
+                        value={price}
+                        onChangeText={(text) => setPrice(text)}
                     />
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={Upload}>
                         <Text style={styles.submit_button}>Tải lên</Text>
                     </TouchableOpacity>
                 </View>
