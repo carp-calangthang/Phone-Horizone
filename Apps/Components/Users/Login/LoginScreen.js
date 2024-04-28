@@ -10,11 +10,11 @@ import Axios from '../../../Api/Axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function LoginScreen() {
-    const navigation = useNavigation();
+    const navigation = useNavigation(); // tạo biến navigation để điều hướng giữa các màn hình
 
     // set initial state of username and password   
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('')
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
     // update state of username
@@ -31,9 +31,10 @@ function LoginScreen() {
         setShowPassword(!showPassword);
     };
 
+    // useEffect(() là một hook của React dùng để thực thi một hàm sau mỗi lần render
     useEffect(() => {
-        // Check if token is valid when component mounts
-        checkToken();
+        // Kiểm tra token khi màn hình được tải lần đầu tiên
+        checkToken(); // Kiểm tra token khi màn hình được tải lần đầu tiên
     }, []);
 
     // const removeToken = async () => {
@@ -45,6 +46,7 @@ function LoginScreen() {
     //     }
     // };
 
+    // Hàm kiểm tra token khi người dùng đăng nhập
     const checkToken = async () => {
         try {
             const token = await AsyncStorage.getItem('accessToken'); // Lấy token từ AsyncStorage
@@ -58,7 +60,10 @@ function LoginScreen() {
                 });
                 console.log(`Server: ${response.data.message}`);
                 if (response.data.ping === '1'){
-                    navigation.navigate('Home'); // Chuyển hướng người dùng đến màn hình chính nếu token hợp lệ
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Home' }] // Điều hướng đến màn hình chính và xóa lịch sử điều hướng
+                    }); // Chuyển hướng người dùng đến màn hình chính nếu token hợp lệ
                 } else {
                     console.log('Please login to continue! :D');
                 }                     
@@ -72,6 +77,10 @@ function LoginScreen() {
             console.log(error.response.message);
         }
     };
+
+    const cleanToken = () => {
+        AsyncStorage.removeItem('accessToken');
+    }
 
     const handleLogin = () => {
         Axios.post('/users/login', {
@@ -161,7 +170,7 @@ function LoginScreen() {
                         <TouchableOpacity 
                             style={styles.CreateButton} 
                             onPress={() => {
-                                navigation.navigate('RgInput');
+                                navigation.navigate('SignUp');
                             }}
                         >
                             <Text style={styles.CreateButtonTxt}>Create</Text>
