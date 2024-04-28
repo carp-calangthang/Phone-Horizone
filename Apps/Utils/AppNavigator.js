@@ -8,7 +8,10 @@ import CartScreen from '../Components/Cart/CartScreen';
 import Detail from '../Components/Products/Detail';
 
 import LoginScreen from '../Components/Users/Login/LoginScreen';
+import RgInputScreen from '../Components/Users/Register/RegisterScreen';
 import AddScreen from '../Components/Manager/add/AddScreen';
+import ManagerScreen from '../Components/Manager/Manager/ManagerScreen';
+import ProductUpdate from '../Components/Manager/update/UpdateScreen';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +42,21 @@ export const AppNavigator = () => {
                 <Stack.Screen
                 name="Add"
                 component={AddScreen}
+                options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                name="SignUp"
+                component={RgInputScreen}
+                options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                name="Manager"
+                component={ManagerScreen}
+                options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                name="Update"
+                component={ProductUpdate}
                 options={{ headerShown: false }}
                 />
             </Stack.Navigator>

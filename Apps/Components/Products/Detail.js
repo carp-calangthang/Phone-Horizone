@@ -14,9 +14,13 @@ function Detail() {
     const route = useRoute();
     const { productId } = route.params;
 
+    // Sử dụng useState để lưu trữ thông tin chi tiết sản phẩm
+    // detail sẽ chứa thông tin sản phẩm được lấy từ api thông qua productId
+    // setDetail sẽ cập nhật thông tin sản phẩm vào state detail khi lấy được dữ liệu từ api
     const [detail, setDetail] = useState({});
 
     useEffect(() => {
+        // Sử dụng Axios để gửi request lấy thông tin sản phẩm từ api với praameter là productId
         Axios.get(`/product/find/${productId}`)
             .then((response) => {
                 setDetail(response.data);
@@ -24,12 +28,14 @@ function Detail() {
             .catch((error) => {
                 console.log(error);
             });
-    }, [productId]);
+    }, [productId]); // useEffect sẽ chạy lại khi productId thay đổi
 
     const AddCart = async (productid) => {
         try{
             console.log(productid);
             const token = await AsyncStorage.getItem('accessToken');
+            // gửi request post với body là productid và quantity = 1 và header chứa token
+            // Dùng Bear token để xác thực người dùng
             const response = await Axios.post('/cart/add', {
                 productid,
                 quantity: 1
